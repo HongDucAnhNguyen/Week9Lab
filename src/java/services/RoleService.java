@@ -4,11 +4,16 @@
  * and open the template in the editor.
  */
 package services;
-
+import java.sql.SQLException;
+import models.Role;
 /**
  *
  * @author nguye
  */
 public class RoleService {
-    
+     public Role getRole(int roleID) throws Exception{
+        RoleDB roleDB = new RoleDB();
+        Role role = roleDB.getRole(roleID);
+        return role;
+    }
 }
