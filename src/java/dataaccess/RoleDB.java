@@ -27,6 +27,7 @@ public class RoleDB {
             ps = connect.prepareStatement(sql);
             ps.setInt(1, roleNo);
             rs = ps.executeQuery();
+            //expecting one result so no loops needed
             if(rs.next()){
             String roleName = rs.getString(2);
             role = new Role(roleNo, roleName);

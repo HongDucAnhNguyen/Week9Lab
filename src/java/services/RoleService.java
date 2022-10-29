@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package services;
-import java.sql.SQLException;
+import dataaccess.RoleDB;
 import models.Role;
 /**
  *

@@ -28,7 +28,7 @@ public class UserDB {
         PreparedStatement ps = null;
         ResultSet rs = null;
         RoleService rService = new RoleService();
-        String sql = "SELECT * FROM userdb";
+        String sql = "SELECT * FROM user";
         try {
             ps = connect.prepareStatement(sql);
 
@@ -48,5 +48,23 @@ public class UserDB {
             cp.freeConnection(connect);
         }
         return users;
+    }
+
+    public void insertUser(User user) throws Exception {
+        ConnectionPool cp = ConnectionPool.getInstance();
+        Connection connect = cp.getConnection();
+        PreparedStatement ps = null;
+        String sql = "INSERT INTO user (email, first_name, last_name, password, role) VALUES(?,? ,?,?,?)";
+        try {
+            ps = connect.prepareStatement(sql);
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getFirstName());
+            ps.setString(3, user.getLastName());
+            ps.setString(4, user.getPassword());
+            ps.setInt(5, user.getRole().getRoleID());
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            cp.freeConnection(connect);
+        }
     }
 }
