@@ -33,7 +33,14 @@
                         <td>${user.lastName}</td>
                         <td>${user.role.roleName}</td>
                         <td><a href="User?action=Edit&amp;email=${user.email}">Edit</a></td>
-                        <td><a href="User?action=Delete">Delete</a></td>
+                        <td> <form action="User" method="POST">
+                                <input type="submit" value="Delete">
+                                <input type="hidden" name="action" value="Delete">
+                                <c:if test="${selectedUser ne null}">
+                                    <input type="hidden" name="email" value="${selectedUser.email}">
+                                </c:if>
+
+                            </form></td>
                     </tr>
                 </c:forEach>
             </table>
@@ -59,6 +66,7 @@
                 <input type="submit" value="Add">
                 <input type="hidden" name="action" value="Add">
             </form>
+            <p>${insertMessage}</p>
         </c:if>
 
 
@@ -82,15 +90,13 @@
 
                 <input type="submit" value="Update">
                 <input type="hidden" name="action" value="Update">
-                <form action="User">
-                    <input type="submit" value="Cancel">
-                </form>
-            </c:if>
+                <input type="hidden" name="email" value="${selectedUser.email}">
+            </form>
+            <form action="User">
+                <input type="submit" value="Cancel">
+            </form>
 
+        </c:if>
 
-
-
-
-            <p>${insertMessage}</p>
     </body>
 </html>

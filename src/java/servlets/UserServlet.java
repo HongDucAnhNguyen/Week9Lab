@@ -41,6 +41,9 @@ public class UserServlet extends HttpServlet {
          if (action != null && action.equals("Edit")) {
             try {
                 String email = request.getParameter("email");
+                if(email.contains("+")){
+                    email.replaceAll("+", "");
+                }
                 User user = us.get(email);
                 request.setAttribute("selectedUser", user);
 

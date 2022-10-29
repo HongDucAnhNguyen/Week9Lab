@@ -56,12 +56,16 @@ public class UserDB {
         PreparedStatement ps = null;
         PreparedStatement ps2 = null;
         ResultSet rs = null;
+        String email = user.getEmail();
+        if (email.contains("+")) {
+            email = email.replace("+", "");
+        }
         String sql = "INSERT INTO user (email, first_name, last_name, password, role) VALUES(?,? ,?,?,?)";
         String query = "SELECT * FROM user WHERE email=?";
         try {
 
             ps2 = connect.prepareStatement(query);
-            ps2.setString(1, user.getEmail());
+            ps2.setString(1, email);
             rs = ps2.executeQuery();
             int rsRowCount = 0;
             while (rs.next()) {
@@ -69,13 +73,13 @@ public class UserDB {
             }
             if (rsRowCount <= 1) {
                 ps = connect.prepareStatement(sql);
-                ps.setString(1, user.getEmail());
+                ps.setString(1, email);
                 ps.setString(2, user.getFirstName());
                 ps.setString(3, user.getLastName());
                 ps.setString(4, user.getPassword());
                 ps.setInt(5, user.getRole().getRoleID());
                 ps.executeUpdate();
-            } else {
+            } else if (rsRowCount > 1) {
                 return "existing email";
             }
 
@@ -95,7 +99,7 @@ public class UserDB {
         PreparedStatement ps = null;
         ResultSet rs = null;
         RoleService rService = new RoleService();
-        String sql = "SELECT * FROM note WHERE email=?";
+        String sql = "SELECT * FROM user WHERE email=?";
 
         try {
             ps = con.prepareStatement(sql);
