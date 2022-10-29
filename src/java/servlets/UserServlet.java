@@ -28,9 +28,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         UserService us = new UserService();
         String action = request.getParameter("action");
-        if (action != null) {
-            request.setAttribute("message", action);
-        }
+       
         try {
 
             List<User> users = us.getAll();
@@ -38,6 +36,17 @@ public class UserServlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("message", "error");
+        }
+        
+         if (action != null && action.equals("Edit")) {
+            try {
+                String email = request.getParameter("email");
+                User user = us.get(email);
+                request.setAttribute("selectedUser", user);
+
+            } catch (Exception ex) {
+                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
@@ -58,15 +67,25 @@ public class UserServlet extends HttpServlet {
         String lastname = request.getParameter("lastname");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
+        String insertMessage = "";
 
         try {
             switch (action) {
                 case "Add":
-                    us.insert(email, firstname, lastname, password, role);
+                    insertMessage = us.insert(email, firstname, lastname, password, role);
+                    if (insertMessage.equals("existing email")) {
+                        request.setAttribute("insertMessage", insertMessage);
+                    }
+                    break;
+                case "Update":
+                    us.update(email, firstname, lastname, password, role);
+                    break;
+                case "Delete":
+                    us.delete(email);
                     break;
 
             }
-            request.setAttribute("message", action);
+
         } catch (Exception ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("message", "error");

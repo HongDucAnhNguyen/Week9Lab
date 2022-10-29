@@ -32,39 +32,65 @@
                         <td>${user.firstName}</td>
                         <td>${user.lastName}</td>
                         <td>${user.role.roleName}</td>
-                        <td><a href="User?action=Edit">Edit</a></td>
-                        <td><a href="">Delete</a></td>
+                        <td><a href="User?action=Edit&amp;email=${user.email}">Edit</a></td>
+                        <td><a href="User?action=Delete">Delete</a></td>
                     </tr>
                 </c:forEach>
             </table>
         </c:if>
         <!-- display users table here-->
 
-
-        <c:if test="${message eq null}"> <h1>Add Users</h1></c:if>
-        <c:if test="${message eq 'Add'}"> <h1>Add Users</h1></c:if>
-        <c:if test="${message eq 'Edit'}"><h1>Edit Users</h1></c:if>
+        <c:if test="${selectedUser eq null}">
+            <h1>Add Users</h1>
 
 
 
             <form action="User" method="POST">
-                Email: <input type="text" name="email" required readonly = ${message eq "Edit" ? "true" : "false"}><br>            
-            First name: <input type="text" name="firstname" required><br>            
-            Last Name: <input type="text" name="lastname" required><br>
-            Password: <input type="password" name="password" required><br>
-            Role: <select name="role"><br>
-                <option value="system admin">System Admin</option>
-                <option value="regular user">Regular User</option>
-            </select> <br>
 
-            <c:if test="${message eq null}"> <input type="submit" value="Add">
-                <input type="hidden" name="action" value="Add"></c:if>
-            <c:if test="${message eq 'Add'}"> <input type="submit" value="Add">
-                <input type="hidden" name="action" value="Add"></c:if>
-            <c:if test="${message eq 'Edit'}"> <input type="submit" value="Edit">
-                <input type="hidden" name="action" value="Edit"></c:if>
-        </form>
+                Email: <input type="text" name="email" required><br>
+                First name: <input type="text" name="firstname" required><br>            
+                Last Name: <input type="text" name="lastname" required><br>
+                Password: <input type="password" name="password" required><br>
+                Role: <select name="role"><br>
+                    <option value="system admin">System Admin</option>
+                    <option value="regular user">Regular User</option>
+                </select> <br>
+
+                <input type="submit" value="Add">
+                <input type="hidden" name="action" value="Add">
+            </form>
+        </c:if>
 
 
+        <c:if test="${selectedUser ne null}">
+
+            <h1>Edit Users</h1>
+
+
+
+            <form action="User" method="POST">
+
+                Email: <p>${selectedUser.email}</p>
+                First name: <input type="text" name="firstname" required value="${selectedUser.firstName}"><br>            
+                Last Name: <input type="text" name="lastname" required value="${selectedUser.lastName}" ><br>
+                Password: <input type="password" name="password" required><br>
+                Role: <select name="role"><br>
+                    <option value="system admin">System Admin</option>
+                    <option value="regular user">Regular User</option>
+                </select> <br>
+
+
+                <input type="submit" value="Update">
+                <input type="hidden" name="action" value="Update">
+                <form action="User">
+                    <input type="submit" value="Cancel">
+                </form>
+            </c:if>
+
+
+
+
+
+            <p>${insertMessage}</p>
     </body>
 </html>
