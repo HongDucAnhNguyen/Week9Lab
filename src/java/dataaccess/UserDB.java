@@ -62,6 +62,7 @@ public class UserDB {
             ps.setString(3, user.getLastName());
             ps.setString(4, user.getPassword());
             ps.setInt(5, user.getRole().getRoleID());
+            ps.executeUpdate();
         } finally {
             DBUtil.closePreparedStatement(ps);
             cp.freeConnection(connect);

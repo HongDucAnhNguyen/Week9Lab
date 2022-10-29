@@ -13,7 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import models.Role;
 import models.User;
 import services.UserService;
 
@@ -26,11 +26,10 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         UserService us = new UserService();
+        UserService us = new UserService();
 
         try {
-            HttpSession session = request.getSession();
-            String email = (String) session.getAttribute("email");
+
             List<User> users = us.getAll();
             request.setAttribute("users", users);
         } catch (Exception ex) {
@@ -38,15 +37,47 @@ public class UserServlet extends HttpServlet {
             request.setAttribute("message", "error");
         }
 
-        
-
         getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+//        HttpSession session = request.getSession();
+//        String email = (String) session.getAttribute("email");
 
+        UserService us = new UserService();
+
+        // action must be one of: create, update, delete
+        String action = request.getParameter("action");
+        String email = request.getParameter("email");
+        String firstname = request.getParameter("firstname");
+        String lastname = request.getParameter("lastname");
+        String password = request.getParameter("password");
+        String role = request.getParameter("role");
+
+        try {
+            switch (action) {
+                case "create":
+                    us.insert(email, firstname, lastname, password, role);
+                    break;
+
+            }
+            request.setAttribute("message", action);
+        } catch (Exception ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("message", "error");
+        }
+
+        try {
+            List<User> users = us.getAll();
+            request.setAttribute("users", users);
+        } catch (Exception ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("message", "error");
+        }
+
+        getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
     }
 
 }

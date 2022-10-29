@@ -17,42 +17,45 @@
         <c:if test="${users.size() lt 1}">
             <b>No users found. Please add a user.</b>
         </c:if>
-        
+
         <c:if test="${users.size() gt 0}">
-        <table border="1">
-            <tr>
-                <th>Email</th>
-                <th>Fist Name</th>
-                <th>last Name</th>
-                <th>Role</th>
-            </tr>
-            <c:forEach var="user" items="${users}">            
-            <tr>
-                <td>${user.email}</td>
-                <td>${user.firstName}</td>
-                <td>${user.lastName}</td>
-                <td>${user.role.roleName}</td>
-                <td><a href="">Edit</a></td>
-                <td><a href="">Delete</a></td>
-            </tr>
-        </c:forEach>
-        </table>
+            <table border="1">
+                <tr>
+                    <th>Email</th>
+                    <th>Fist Name</th>
+                    <th>last Name</th>
+                    <th>Role</th>
+                </tr>
+                <c:forEach var="user" items="${users}">            
+                    <tr>
+                        <td>${user.email}</td>
+                        <td>${user.firstName}</td>
+                        <td>${user.lastName}</td>
+                        <td>${user.role.roleName}</td>
+                        <td><a href="">Edit</a></td>
+                        <td><a href="">Delete</a></td>
+                    </tr>
+                </c:forEach>
+            </table>
         </c:if>
         <!-- display users table here-->
 
-        <h2>Add Users</h2>
-        <form action="User?action=add" method="post">
-            Email: <input type="text" name="email"><br>            
-            First name: <input type="text" name="Fname"><br>            
-            Last Name: <input type="text" name="Lname"><br>
-            Password: <input type="password" name="password"><br>
+
+        <h1>Add Users</h1>
+
+        <form action="User" method="POST">
+            Email: <input type="text" name="email" required><br>            
+            First name: <input type="text" name="firstname" required><br>            
+            Last Name: <input type="text" name="lastname" required><br>
+            Password: <input type="password" name="password" required><br>
             Role: <select name="role"><br>
-                <option value="admin">System Admin</option>
-                <option value="regular">Regular User</option>
+                <option value="system admin">System Admin</option>
+                <option value="regular user">Regular User</option>
             </select> <br>
-            
+
             <input type="submit" value="Add">
+            <input type="hidden" name="action" value="create">
         </form>
-        
+
     </body>
 </html>
