@@ -32,7 +32,7 @@
                         <td>${user.firstName}</td>
                         <td>${user.lastName}</td>
                         <td>${user.role.roleName}</td>
-                        <td><a href="">Edit</a></td>
+                        <td><a href="User?action=Edit">Edit</a></td>
                         <td><a href="">Delete</a></td>
                     </tr>
                 </c:forEach>
@@ -41,10 +41,14 @@
         <!-- display users table here-->
 
 
-        <h1>Add Users</h1>
+        <c:if test="${message eq null}"> <h1>Add Users</h1></c:if>
+        <c:if test="${message eq 'Add'}"> <h1>Add Users</h1></c:if>
+        <c:if test="${message eq 'Edit'}"><h1>Edit Users</h1></c:if>
 
-        <form action="User" method="POST">
-            Email: <input type="text" name="email" required><br>            
+
+
+            <form action="User" method="POST">
+                Email: <input type="text" name="email" required readonly = ${message eq "Edit" ? "true" : "false"}><br>            
             First name: <input type="text" name="firstname" required><br>            
             Last Name: <input type="text" name="lastname" required><br>
             Password: <input type="password" name="password" required><br>
@@ -53,9 +57,14 @@
                 <option value="regular user">Regular User</option>
             </select> <br>
 
-            <input type="submit" value="Add">
-            <input type="hidden" name="action" value="create">
+            <c:if test="${message eq null}"> <input type="submit" value="Add">
+                <input type="hidden" name="action" value="Add"></c:if>
+            <c:if test="${message eq 'Add'}"> <input type="submit" value="Add">
+                <input type="hidden" name="action" value="Add"></c:if>
+            <c:if test="${message eq 'Edit'}"> <input type="submit" value="Edit">
+                <input type="hidden" name="action" value="Edit"></c:if>
         </form>
+
 
     </body>
 </html>
