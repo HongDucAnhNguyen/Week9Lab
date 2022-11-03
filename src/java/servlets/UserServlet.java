@@ -28,7 +28,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         UserService us = new UserService();
         String action = request.getParameter("action");
-       
+
         try {
 
             List<User> users = us.getAll();
@@ -37,11 +37,11 @@ public class UserServlet extends HttpServlet {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("message", "error");
         }
-        
-         if (action != null && action.equals("Edit")) {
+
+        if (action != null && action.equals("Edit")) {
             try {
                 String email = request.getParameter("email");
-                if(email.contains("+")){
+                if (email.contains("+")) {
                     email.replaceAll("+", "");
                 }
                 User user = us.get(email);
@@ -85,6 +85,8 @@ public class UserServlet extends HttpServlet {
                     break;
                 case "Delete":
                     us.delete(email);
+                    break;
+                default:
                     break;
 
             }
