@@ -28,7 +28,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         UserService us = new UserService();
         String action = request.getParameter("action");
-
+        String email = request.getParameter("email");
         try {
 
             List<User> users = us.getAll();
@@ -40,10 +40,6 @@ public class UserServlet extends HttpServlet {
 
         if (action != null && action.equals("Edit")) {
             try {
-                String email = request.getParameter("email");
-                if (email.contains("+")) {
-                    email.replaceAll("+", "");
-                }
                 User user = us.get(email);
                 request.setAttribute("selectedUser", user);
 
@@ -70,15 +66,11 @@ public class UserServlet extends HttpServlet {
         String lastname = request.getParameter("lastname");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
-        String insertMessage = "";
 
         try {
             switch (action) {
                 case "Add":
-                    insertMessage = us.insert(email, firstname, lastname, password, role);
-                    if (insertMessage.equals("existing email")) {
-                        request.setAttribute("insertMessage", insertMessage);
-                    }
+                    us.insert(email, firstname, lastname, password, role);
                     break;
                 case "Update":
                     us.update(email, firstname, lastname, password, role);

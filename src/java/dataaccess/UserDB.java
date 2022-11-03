@@ -17,11 +17,11 @@ import models.User;
 
 public class UserDB {
 
-    public List<User> getAll(String owner) throws Exception {
+    public List<User> getAll() throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         try {
-            Role role = em.find(Role.class, owner);
-            return role.getUserList();
+            List<User> users = em.createNamedQuery("User.findAll", User.class).getResultList();
+            return users;
         } finally {
             em.close();
         }
@@ -76,10 +76,20 @@ public class UserDB {
 
     public void delete(User user) throws Exception {
 
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         try {
+            Role role = user.getRole();
+            role.getUserList().remove(user);
+            trans.begin();
+            em.remove(em.merge(user));
+            em.merge(role);
+            trans.commit();
 
+        } catch (Exception ex) {
+            trans.rollback();
         } finally {
-
+            em.close();
         }
     }
 }
