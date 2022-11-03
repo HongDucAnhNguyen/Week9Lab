@@ -9,36 +9,21 @@ package dataaccess;
  *
  * @author nguye
  */
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import javax.persistence.EntityManager;
 import models.Role;
+import static models.User_.role;
 
 public class RoleDB {
 
     public Role getRole(int roleNo) throws Exception {
-        Role role = new Role();
-        ConnectionPool cp = ConnectionPool.getInstance();
-        Connection connect = cp.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        String sql = "SELECT * FROM role WHERE role_id = ? ";
-        try {
-            ps = connect.prepareStatement(sql);
-            ps.setInt(1, roleNo);
-            rs = ps.executeQuery();
-            //expecting one result so no loops needed
-            if(rs.next()){
-            String roleName = rs.getString(2);
-            role = new Role(roleNo, roleName);
-            }
-        } finally {
-             DBUtil.closeResultSet(rs);
-            DBUtil.closePreparedStatement(ps);
-            cp.freeConnection(connect);
-        }
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
-        return role;
+        try {
+            Role role = em.find(Role.class, roleNo);
+            return role;
+        } finally {
+            em.close();
+        }
 
     }
 }
